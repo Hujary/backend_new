@@ -3,18 +3,18 @@
 // https://github.com/microsoft/Web-Dev-For-Beginners/tree/main/7-bank-project/api
 // ***************************************************************************
 
+  // App constants
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors')
 const crypto = require('crypto');
 const pkg = require('./package.json');
-
-
-// App constants
-const port = process.env.PORT || 3000;
+const filename = __dirname + "/profs.json";
 const apiPrefix = '/api';
+//const port = process.env.PORT || 3000;
 
-// Store data in-memory, not suited for production use!
+// lokale Datenbank "für tests"
+/*
 const db = {
     test: {
       user: 'test',
@@ -39,14 +39,26 @@ const db = {
         ],
       }
   
-  };
+  }; */
+
   
 // Create the Express app & setup middlewares
 const app = express();
+const fs = require("fs");
+const cors = require("cors");
+const port = 8080;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors({ origin: /http:\/\/(127(\.\d){3}|localhost)/}));
-app.options('*', cors());
+app.options('*', cors()); //for configuring Cross-Origin Resource Sharing (CORS)
+
+app.use(express.json()); //for parsing application/json
+app.use(cors()); //for configuring Cross-Origin Resource Sharing (CORS)
+function log(req, res, next) {
+    console.log(req.method + " Request at" + req.url);
+    next();
+}
+app.use(log);
 
 // ***************************************************************************
 
@@ -54,18 +66,16 @@ app.options('*', cors());
 const router = express.Router();
 
 // Hello World for index page
+/*
 app.get('/', function (req, res) {
     return res.send("Hello World!");
 })
 
 app.get('/api', function (req, res) {
     return res.send("Fabrikam Bank API");
-})
+}) */
 
-app.get('/test', function (req, res) {
-    return res.send("test");
-})
-  
+ 
 app.get("/profs/:id", function (req, res) {
   fs.readFile(filename, "utf8", function (err, data) {
       const dataAsObject = JSON.parse(data)[req.params.id];
@@ -90,6 +100,29 @@ app.put("/profs/:id", function (req, res) {
       });
   });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ----------------------------------------------
   // Create an account
@@ -246,3 +279,4 @@ app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
   
+
