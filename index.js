@@ -76,32 +76,69 @@ app.get('/api', function (req, res) {
 }) */
 
  
-app.get("/profs/:id", function (req, res) {
-  fs.readFile(filename, "utf8", function (err, data) {
-      const dataAsObject = JSON.parse(data)[req.params.id];
-      res.writeHead(200, {
-          "Content-Type": "application/json",
-      });
-      res.end(JSON.stringify(dataAsObject));
-  });
+//Endpoints
+app.get("/profs", function (req, res) {
+    fs.readFile(filename, "utf8", function (err, data) {
+        res.writeHead(200, {
+            "Content-Type": "application/json",
+        });
+        res.end(data);
+    });
 });
 
+app.get("/profs/:id", function (req, res) {
+    fs.readFile(filename, "utf8", function (err, data) {
+        const dataAsObject = JSON.parse(data)[req.params.id];
+        res.writeHead(200, {
+            "Content-Type": "application/json",
+        });
+        res.end(JSON.stringify(dataAsObject));
+    });
+});
 
 app.put("/profs/:id", function (req, res) {
-  fs.readFile(filename, "utf8", function (err, data) {
-      let dataAsObject = JSON.parse(data);
-      dataAsObject[req.params.id].name = req.body.name;
-      dataAsObject[req.params.id].rating = req.body.rating;
-      fs.writeFile(filename, JSON.stringify(dataAsObject), () => {
-          res.writeHead(200, {
-              "Content-Type": "application/json",
-          });
-          res.end(JSON.stringify(dataAsObject));
-      });
-  });
+    fs.readFile(filename, "utf8", function (err, data) {
+        let dataAsObject = JSON.parse(data);
+        dataAsObject[req.params.id].name = req.body.name;
+        dataAsObject[req.params.id].rating = req.body.rating;
+        fs.writeFile(filename, JSON.stringify(dataAsObject), () => {
+            res.writeHead(200, {
+                "Content-Type": "application/json",
+            });
+            res.end(JSON.stringify(dataAsObject));
+        });
+    });
 });
 
+app.delete("/profs/:id", function (req, res) {
+    fs.readFile(filename, "utf8", function (err, data) {
+        let dataAsObject = JSON.parse(data);
+        dataAsObject.splice(req.params.id, 1);
+        fs.writeFile(filename, JSON.stringify(dataAsObject), () => {
+            res.writeHead(200, {
+                "Content-Type": "application/json",
+            });
+            res.end(JSON.stringify(dataAsObject));
+        });
+    });
+});
 
+app.post("/profs", function (req, res) {
+    fs.readFile(filename, "utf8", function (err, data) {
+        let dataAsObject = JSON.parse(data);
+        dataAsObject.push({
+            id: dataAsObject.length,
+            name: req.body.name,
+            rating: req.body.rating,
+        });
+        fs.writeFile(filename, JSON.stringify(dataAsObject), () => {
+            res.writeHead(200, {
+                "Content-Type": "application/json",
+            });
+            res.end(JSON.stringify(dataAsObject));
+        });
+    });
+});
 
 
 
