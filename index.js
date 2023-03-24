@@ -1,15 +1,9 @@
-// ***************************************************************************
-// Bank API code from Web Dev For Beginners project
-// https://github.com/microsoft/Web-Dev-For-Beginners/tree/main/7-bank-project/api
-// ***************************************************************************
-
-  // App constants
+ // App constants
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors')
 const crypto = require('crypto');
 const pkg = require('./package.json');
-const filename = __dirname + "/profs.json";
+const filename = __dirname + "/database.json";
 const apiPrefix = '/api';
 const port = process.env.PORT || 3000;
 
@@ -22,7 +16,7 @@ const cors = require("cors");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors({ origin: /http:\/\/(127(\.\d){3}|localhost)/}));
-app.options('*', cors()); //for configuring Cross-Origin Resource Sharing (CORS)
+//app.options('*', cors()); //for configuring Cross-Origin Resource Sharing (CORS)
 
 app.use(express.json()); //for parsing application/json
 app.use(cors()); //for configuring Cross-Origin Resource Sharing (CORS)
@@ -32,46 +26,43 @@ function log(req, res, next) {
 }
 app.use(log);
 
-// ***************************************************************************
-
 // Configure routes
 const router = express.Router();
 
-// Hello World for index page
+                         
+                              //Endpoints
+// ***************************************************************************
+
 app.get('/', function (req, res) {
     return res.send("Hello World!");
 })
 
-app.get('/api', function (req, res) {
-    return res.send("Fabrikam Bank API");
-}) 
-
-//Endpoints
-app.get("/profs", function (req, res) {
+app.get("/product", function (req, res) {
   fs.readFile(filename, "utf8", function (err, data) {
       res.writeHead(200, {
           "Content-Type": "application/json",
       });
-     return res.end(data);
+      res.end(data);
   });
 });
 
-app.get("/profs/:id", function (req, res) {
+app.get("/product/:id", function (req, res) {
   fs.readFile(filename, "utf8", function (err, data) {
       const dataAsObject = JSON.parse(data)[req.params.id];
       res.writeHead(200, {
           "Content-Type": "application/json",
       });
-     return res.end(JSON.stringify(dataAsObject));
+      res.end(data);
   });
 });
 
-app.post("/profs", function (req, res) {
+app.post("/product", function (req, res) {
   fs.readFile(filename, "utf8", function (err, data) {
       let dataAsObject = JSON.parse(data);
       dataAsObject.push({
           id: dataAsObject.length,
           name: req.body.name,
+          //price: req.body.price,
           rating: req.body.rating,
       });
       fs.writeFile(filename, JSON.stringify(dataAsObject), () => {
@@ -82,6 +73,14 @@ app.post("/profs", function (req, res) {
       });
   });
 });
+
+
+
+
+
+
+
+
 
 
 // ----------------------------------------------
