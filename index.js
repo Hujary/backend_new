@@ -11,42 +11,14 @@ const crypto = require('crypto');
 const pkg = require('./package.json');
 const filename = __dirname + "/profs.json";
 const apiPrefix = '/api';
-//const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
-// lokale Datenbank "für tests"
-/*
-const db = {
-    test: {
-      user: 'test',
-      currency: '$',
-      description: `Test account`,
-      balance: 75,
-      transactions: [
-        { id: '1', date: '2020-10-01', object: 'Pocket money', amount: 50 },
-        { id: '2', date: '2020-10-03', object: 'Book', amount: -10 },
-        { id: '3', date: '2020-10-04', object: 'Sandwich', amount: -5 }
-      ],
-    },
-    jondoe: {
-        user: 'jondoe',
-        currency: '$',
-        description: `Second test account`,
-        balance: 150,
-        transactions: [
-          { id: '1', date: '2022-10-01', object: 'Gum', amount: -2 },
-          { id: '2', date: '2022-10-03', object: 'Book', amount: -10 },
-          { id: '3', date: '2022-10-04', object: 'Restaurant', amount: -45 }
-        ],
-      }
-  
-  }; */
-
-  
 // Create the Express app & setup middlewares
 const app = express();
 const fs = require("fs");
 const cors = require("cors");
-const port = 8080;
+
+//const port = 8080;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors({ origin: /http:\/\/(127(\.\d){3}|localhost)/}));
@@ -66,99 +38,50 @@ app.use(log);
 const router = express.Router();
 
 // Hello World for index page
-/*
 app.get('/', function (req, res) {
     return res.send("Hello World!");
 })
 
 app.get('/api', function (req, res) {
     return res.send("Fabrikam Bank API");
-}) */
+}) 
 
- 
 //Endpoints
 app.get("/profs", function (req, res) {
-    fs.readFile(filename, "utf8", function (err, data) {
-        res.writeHead(200, {
-            "Content-Type": "application/json",
-        });
-        res.end(data);
-    });
+  fs.readFile(filename, "utf8", function (err, data) {
+      res.writeHead(200, {
+          "Content-Type": "application/json",
+      });
+     return res.end(data);
+  });
 });
 
 app.get("/profs/:id", function (req, res) {
-    fs.readFile(filename, "utf8", function (err, data) {
-        const dataAsObject = JSON.parse(data)[req.params.id];
-        res.writeHead(200, {
-            "Content-Type": "application/json",
-        });
-        res.end(JSON.stringify(dataAsObject));
-    });
-});
-
-app.put("/profs/:id", function (req, res) {
-    fs.readFile(filename, "utf8", function (err, data) {
-        let dataAsObject = JSON.parse(data);
-        dataAsObject[req.params.id].name = req.body.name;
-        dataAsObject[req.params.id].rating = req.body.rating;
-        fs.writeFile(filename, JSON.stringify(dataAsObject), () => {
-            res.writeHead(200, {
-                "Content-Type": "application/json",
-            });
-            res.end(JSON.stringify(dataAsObject));
-        });
-    });
-});
-
-app.delete("/profs/:id", function (req, res) {
-    fs.readFile(filename, "utf8", function (err, data) {
-        let dataAsObject = JSON.parse(data);
-        dataAsObject.splice(req.params.id, 1);
-        fs.writeFile(filename, JSON.stringify(dataAsObject), () => {
-            res.writeHead(200, {
-                "Content-Type": "application/json",
-            });
-            res.end(JSON.stringify(dataAsObject));
-        });
-    });
+  fs.readFile(filename, "utf8", function (err, data) {
+      const dataAsObject = JSON.parse(data)[req.params.id];
+      res.writeHead(200, {
+          "Content-Type": "application/json",
+      });
+     return res.end(JSON.stringify(dataAsObject));
+  });
 });
 
 app.post("/profs", function (req, res) {
-    fs.readFile(filename, "utf8", function (err, data) {
-        let dataAsObject = JSON.parse(data);
-        dataAsObject.push({
-            id: dataAsObject.length,
-            name: req.body.name,
-            rating: req.body.rating,
-        });
-        fs.writeFile(filename, JSON.stringify(dataAsObject), () => {
-            res.writeHead(200, {
-                "Content-Type": "application/json",
-            });
-            res.end(JSON.stringify(dataAsObject));
-        });
-    });
+  fs.readFile(filename, "utf8", function (err, data) {
+      let dataAsObject = JSON.parse(data);
+      dataAsObject.push({
+          id: dataAsObject.length,
+          name: req.body.name,
+          rating: req.body.rating,
+      });
+      fs.writeFile(filename, JSON.stringify(dataAsObject), () => {
+          res.writeHead(200, {
+              "Content-Type": "application/json",
+          });
+         return res.end(JSON.stringify(dataAsObject));
+      });
+  });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // ----------------------------------------------
@@ -316,4 +239,5 @@ app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
   
+
 
