@@ -62,8 +62,9 @@ app.post("/product", function (req, res) {
       dataAsObject.push({
           id: dataAsObject.length,
           name: req.body.name,
-          //price: req.body.price,
-          rating: req.body.rating,
+          price: req.body.price,
+          ean: req.body.ean,
+          src: req.body.src,
       });
       fs.writeFile(filename, JSON.stringify(dataAsObject), () => {
           res.writeHead(200, {
