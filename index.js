@@ -61,7 +61,36 @@ app.get('/', function (req, res) {
 app.get('/api', function (req, res) {
     return res.send("Fabrikam Bank API");
 })
+
+app.get('/test', function (req, res) {
+    return res.send("test");
+})
   
+app.get("/profs/:id", function (req, res) {
+  fs.readFile(filename, "utf8", function (err, data) {
+      const dataAsObject = JSON.parse(data)[req.params.id];
+      res.writeHead(200, {
+          "Content-Type": "application/json",
+      });
+      res.end(JSON.stringify(dataAsObject));
+  });
+});
+
+
+app.put("/profs/:id", function (req, res) {
+  fs.readFile(filename, "utf8", function (err, data) {
+      let dataAsObject = JSON.parse(data);
+      dataAsObject[req.params.id].name = req.body.name;
+      dataAsObject[req.params.id].rating = req.body.rating;
+      fs.writeFile(filename, JSON.stringify(dataAsObject), () => {
+          res.writeHead(200, {
+              "Content-Type": "application/json",
+          });
+          res.end(JSON.stringify(dataAsObject));
+      });
+  });
+});
+
 // ----------------------------------------------
   // Create an account
 router.post('/accounts', (req, res) => {
