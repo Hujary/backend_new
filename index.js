@@ -63,6 +63,7 @@ app.post("/product", function (req, res) {
           id: dataAsObject.length,
           name: req.body.name,
           price: req.body.price,
+          size: req.body.size,
           ean: req.body.ean,
           src: req.body.src,
       });
